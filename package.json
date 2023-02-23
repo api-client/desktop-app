@@ -1,0 +1,82 @@
+{
+  "name": "@api-client/desktop-app",
+  "version": "0.0.0",
+  "description": "The desktop application for the API Client",
+  "license": "CC-BY-2.0",
+  "main": "dist/io/main.js",
+  "type": "commonjs",
+  "author": {
+    "name": "Pawel Uchida-Psztyc",
+    "email": "pawel.psztyc@gmail.com"
+  },
+  "contributors": [
+    "Your name can be here!"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/api-client/ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/api-client/ui/issues",
+    "email": "pawel.pszytc@gmail.com"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "eslint -c .eslintrc --ext .ts ./src",
+    "start:original": "npm run build && electron ./dist/io/main.js",
+    "start": "npm run build:rollup && tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"electron ./dist/src/io/main.cjs.js --dev\"",
+    "start2": "npm run build:rollup && tsc && concurrently -k -r \"rollup -c rollup.config.mjs --watch\" \"tsc --watch --preserveWatchOutput\" \"electron ./dist/src/io/main.cjs.js --dev\"",
+    "build:rollup": "rimraf dist && rollup -c rollup.config.mjs",
+    "start:rollup": "tsc && npm run start:electron",
+    "start:electron": "electron ./dist/src/io/main.cjs.js --dev",
+    "prepare": "npm run build:rollup"
+  },
+  "dependencies": {
+    "@api-client/core": "^0.9.8",
+    "@api-client/net-store": "^0.9.12",
+    "@api-client/ui": "^0.0.9",
+    "electron-log": "^5.0.0-beta.16",
+    "electron-store": "^8.1.0",
+    "esm": "^3.2.25",
+    "mime-types": "^2.1.35",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/mime-types": "^2.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@web/dev-server-esbuild": "^0.3.3",
+    "@web/rollup-plugin-copy": "^0.3.0",
+    "@web/rollup-plugin-html": "^1.11.0",
+    "concurrently": "^7.6.0",
+    "deepmerge": "^4.3.0",
+    "electron": "^23.1.1",
+    "electron-reloader": "^1.2.3",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "rimraf": "^4.1.2",
+    "rollup": "^3.17.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix"
+    ],
+    "*.ts": [
+      "eslint --fix"
+    ]
+  }
+}

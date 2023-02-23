@@ -1,0 +1,9 @@
+export const HTTP_CLIENT_PROTOCOL = 'http-client';
+export const WEB_SESSION_PERSIST = 'persist:web-session';
+export const APP_HOSTNAME = 'api-client.app';
+export const DEFAULT_PERSIST = 'persist:api-client';
+export const RENDERER_PROTOCOL = 'web-module';
+export const ConfigBroadcastChannel = 'app-config';
+export const KeyPrefix = 'api-client.config.';
+export const EnvironmentsKey = `${KeyPrefix}environments`;
+export const TelemetryKey = `${KeyPrefix}telemetry`;
