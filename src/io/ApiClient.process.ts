@@ -13,6 +13,7 @@ import { StoreConfig } from "./windows/StoreConfig.js";
 import appWindows from "./windows/AppWindows.js";
 import { AppClientStart } from "./windows/AppClientStart.js";
 import { NavigationBindings } from "./bindings/NavigationBindings.js";
+import { ProxyBindings } from "./bindings/ProxyBindings.js";
 
 /**
  * A class that is exported to the `CJS` world that initializes the main 
@@ -47,10 +48,10 @@ export class ApiClientProcess {
 
     this.setupApiClientProtocol();
     await this.setupBroadcastChannel();
-
     this.setupConfiguration();
     this.setupFilesSupport();
-    this.setupNavigation()
+    this.setupNavigation();
+    await this.setupHttpProxy();
 
     // we are entering first run flow here.
     appWindows.ignoreQuit = true;
@@ -209,5 +210,11 @@ export class ApiClientProcess {
     logger.debug(`Initializing navigation bindings`);
     const file = new NavigationBindings();
     file.listen();
+  }
+
+  protected async setupHttpProxy(): Promise<void> {
+    logger.debug(`Initializing http proxy`);
+    const file = new ProxyBindings();
+    await file.initialize();
   }
 }

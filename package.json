@@ -29,13 +29,12 @@
     "start2": "npm run build:rollup && tsc && concurrently -k -r \"rollup -c rollup.config.mjs --watch\" \"tsc --watch --preserveWatchOutput\" \"electron ./dist/src/io/main.cjs.js --dev\"",
     "build:rollup": "rimraf dist && rollup -c rollup.config.mjs",
     "start:rollup": "tsc && npm run start:electron",
-    "start:electron": "electron ./dist/src/io/main.cjs.js --dev",
-    "prepare": "npm run build:rollup"
+    "start:electron": "electron ./dist/src/io/main.cjs.js --dev"
   },
   "dependencies": {
     "@api-client/core": "^0.9.8",
     "@api-client/net-store": "^0.9.12",
-    "@api-client/ui": "^0.0.9",
+    "@api-client/ui": "^0.0.14",
     "electron-log": "^5.0.0-beta.16",
     "electron-store": "^8.1.0",
     "esm": "^3.2.25",
@@ -63,6 +62,7 @@
     "lint-staged": "^13.1.0",
     "rimraf": "^4.1.2",
     "rollup": "^3.17.1",
+    "rollup-plugin-import-css": "^3.1.0",
     "tslib": "^2.5.0",
     "typescript": "^4.9.5"
   },

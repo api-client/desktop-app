@@ -25,17 +25,13 @@ export interface Logger {
 
 export interface AppIpc {
   /**
-   * @deprecated DO NOT USE, to be removed
-   */
-  invoke(channel: string, ...args: unknown[]): Promise<unknown>;
-  /**
    * Handles messages sent via the `app-config` channel. Note, this is *only* received by the BroadcastWindow.
    */
   handleConfig(channel: string, callback: (event: Electron.IpcRendererEvent, message: ConfigBroadcast) => void): void;
 
   proxy: {
     coreRequest(init: IRequestProxyInit): Promise<IProxyResult<IRequestLog>>;
-    coreHttpProject(init: IHttpProjectProxyInit | IHttpProjectStoreProxyInit): Promise<IProxyResult<IProjectExecutionLog>>;
+    coreHttpProject(init: IHttpProjectProxyInit | IHttpProjectStoreProxyInit, token: string, storeUri: string): Promise<IProxyResult<IProjectExecutionLog>>;
     httpSend(request: IHttpRequest, init?: RequestInit): Promise<Response>;
   }
 
@@ -47,6 +43,8 @@ export interface AppIpc {
   },
 
   file: {
+    saveFileDialog(options: Electron.SaveDialogOptions): Promise<Electron.SaveDialogReturnValue>;
+    openFileDialog(options: Electron.OpenDialogOptions): Promise<Electron.OpenDialogReturnValue>;
     writeFile(path: string, contents: string | Buffer | BufferSource | Blob, opts?: FileWriteOptions): Promise<void>;
     readFile(path: string, opts?: FileReadOptions): Promise<string | Buffer | ArrayBuffer>;
   },

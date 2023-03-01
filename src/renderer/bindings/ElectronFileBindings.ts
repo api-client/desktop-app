@@ -3,7 +3,7 @@ import {
   IOpenFileDialogInit, IOpenFileDialogResult, ISaveFileDialogInit, 
   ISaveFileDialogResult 
 } from "@api-client/ui";
-import { FileFilter, OpenDialogOptions, OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from "electron";
+import { FileFilter, OpenDialogOptions, SaveDialogOptions } from "electron";
 
 export class ElectronFileBindings extends FileBindings {
   async saveFileDialog(opts: ISaveFileDialogInit = {}): Promise<ISaveFileDialogResult> {
@@ -27,7 +27,7 @@ export class ElectronFileBindings extends FileBindings {
       });
     }
     try {
-      const result = await globalThis.ipc.invoke('file-bindings', 'dialog', 'save', dialogOptions) as SaveDialogReturnValue;
+      const result = await globalThis.ipc.file.saveFileDialog(dialogOptions);
       return result;
     } catch (_) {
       return { canceled: true };
@@ -61,7 +61,7 @@ export class ElectronFileBindings extends FileBindings {
     }
 
     try {
-      const result = await globalThis.ipc.invoke('file-bindings', 'dialog', 'open', dialogOptions) as OpenDialogReturnValue;
+      const result = await globalThis.ipc.file.openFileDialog(dialogOptions);
       return {
         canceled: result.canceled,
         filePath: result.filePaths,

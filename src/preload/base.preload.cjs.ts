@@ -18,7 +18,6 @@ type IHttpRequest = import("@api-client/core").IHttpRequest;
 const { ipcRenderer, contextBridge } = require('electron/renderer');
 
 const ipcBridge: AppIpc = {
-  invoke: (channel: string, ...args: unknown[]) => ipcRenderer.invoke(channel, ...args),
   handleConfig: function (channel: string, callback: (event: Electron.IpcRendererEvent, message: ConfigBroadcast) => void): void {
     ipcRenderer.on(channel, callback);
   },
@@ -27,10 +26,10 @@ const ipcBridge: AppIpc = {
     coreRequest: function (init: IRequestProxyInit): Promise<IProxyResult<IRequestLog>> {
       return ipcRenderer.invoke('project-proxy', 'core', 'request', init);
     },
-    coreHttpProject: function (init: IHttpProjectProxyInit | IHttpProjectStoreProxyInit): Promise<IProxyResult<IProjectExecutionLog>> {
-      return ipcRenderer.invoke('project-proxy', 'core', 'http-project', init);
+    coreHttpProject: async function (init: IHttpProjectProxyInit | IHttpProjectStoreProxyInit, token: string, storeUri: string): Promise<IProxyResult<IProjectExecutionLog>> {
+      return ipcRenderer.invoke('project-proxy', 'core', 'http-project', init, token, storeUri);
     },
-    httpSend: function (request: IHttpRequest, init?: RequestInit | undefined): Promise<Response> {
+    httpSend: function (request: IHttpRequest, init: RequestInit = {}): Promise<Response> {
       return ipcRenderer.invoke('project-proxy', 'http', 'send', request, init);
     }
   },
@@ -69,6 +68,8 @@ const ipcBridge: AppIpc = {
   },
 
   file: {
+    saveFileDialog: (options: Electron.SaveDialogOptions): Promise<Electron.SaveDialogReturnValue> => ipcRenderer.invoke('file-bindings', 'dialog', 'save', options),
+    openFileDialog: (options: Electron.OpenDialogOptions): Promise<Electron.OpenDialogReturnValue> => ipcRenderer.invoke('file-bindings', 'dialog', 'open', options),
     writeFile: (path: string, contents: string | Buffer | BufferSource | Blob, opts?: FileWriteOptions): Promise<void> => ipcRenderer.invoke('file-bindings', 'write', path, contents, opts),
     readFile: (path: string, opts: FileReadOptions = {}): Promise<string | Buffer | ArrayBuffer> => ipcRenderer.invoke('file-bindings', 'read', path, opts),
   },
